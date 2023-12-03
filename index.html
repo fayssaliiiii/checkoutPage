@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <link rel="icon" type="image/svg+xml" href="/logo.svg" /> -->
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <script src="https://cdn.coingate.com/cg-js/v1/cg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background-color: white;
+            border-radius: 3px;
+        }
+
+        body::-webkit-scrollbar-track {
+            background-color: #434343;
+        }
+
+        body::-webkit-scrollbar-thumb:hover {
+            background-color: beige;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: rgb(171, 171, 132);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .center {
+            background: #a8ef01;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: beige;
+            padding: 20px;
+            border-radius: 10px;
+            box-sizing: border-box; 
+            text-align: left; 
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #34495e;
+            padding-bottom: 10px;
+            color: #915EFF; 
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+            color: #34495e;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            background-color: #ccc7c7;
+            border-radius: 4px;
+        }
+
+        input[type="checkbox"] {
+            margin-bottom: 0;
+        }
+
+        #subscribe {
+            margin-right: 8px;
+        }
+
+        #price {
+            width: calc(100% - 16px);
+        }
+
+        #paypal-button-container {
+            margin-top: 20px;
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        input[type="checkbox"] {
+            margin-bottom: 0;
+        }
+
+        #subscribe {
+            margin-right: 0; 
+            width: 100%; 
+            margin-bottom: 16px;
+        }
+
+        .flex-item {
+            flex: 0 0 48%;
+        }
+        @media screen and (max-width: 600px) {
+            .centerr{
+                background: rgb(234, 234, 177);
+                padding-left: 80px;
+                padding-right: 80px;
+                padding-top: 40px;
+            }
+            .center {
+                width: 100%;
+                padding: 0 10px;
+                text-align: center;
+                
+                
+            }
+
+            h1 {
+                font-size: 24px; 
+                padding: 0 10px;
+            }
+
+            p {
+                font-size: 16px;
+                margin-bottom: 20px;
+         
+            }
+
+            .flex-container {
+                flex-direction: column;
+            }
+
+            .flex-item {
+                width: 100%;
+            }
+
+            p {
+                font-size: 18px; 
+            }
+        }
+    </style>
+    <title>IPTVINA</title>
+</head>
+<body>
+    <div class="centerr">
+        <h1>Welcome</h1>
+        <div class="center">
+            <p>Explore the ultimate entertainment experience with our IPTV service.
+                 Our website has everything you need to have fun and enjoy more movies,
+                  TV shows, and live sports, including soccer matches that you don't want to miss!</p>
+        </div>
+        <h1>IPTVINA CheckOut Page</h1>
+        <label for="email">Address E-mail :</label>
+        <input type="email" id="email" name="email" required placeholder="For example, john@example.com">
+        <div class="flex-item">
+            <label for="subscribe">If you wish to extend your subscription, please check here :</label>
+            <input type="checkbox" id="subscribe" name="subscribe">
+        </div>
+        <label for="price">Prix :</label>
+        <!-- <input type="text" id="price" name="price" readonly value="10.00"> -->
+        <input type="text" id="amount" name="" placeholder="Amount To Purchase">
+
+        <!-- Remove the "OK" button -->
+        <div id="paypal-button-container"></div>
+        <div id="crypto-button-container"></div>
+    </div>
+   
+    <script src="https://www.paypal.com/sdk/js?client-id=AbfnpaXjogiEswa1pLzNLM8HT0k0SaXyY6VtkgCFaQXmd7j3GNmv5F_8dINQd69lgO-tyBsE_WRxmajU"></script>
+    <script src="https://cdn.coingate.com/cg-js/v1/cg.js"></script>
+    <script>
+        // Initialize CoinGate with your public key
+        const coingate = new CoinGate({ publicKey: 'YOUR_COINGATE_PUBLIC_KEY' });
+
+        // Create a cryptocurrency payment button
+        coingate.createOrder({
+            order_id: 'UNIQUE_ORDER_ID',
+            price_amount: '10.00',
+            price_currency: 'USD',
+            receive_currency: 'USDT', // or any other supported cryptocurrency
+            callback_url: 'http://localhost:3000/cryptocurrency-payment-callback', // replace with your actual callback URL
+        }, function(response) {
+            if (response.success) {
+                // Append the payment button to the specified container
+                coingate.createButton('crypto-button-container', {
+                    code: 'usdt',
+                    style: 'none',
+                    amount: '10.00',
+                    order_id: response.id,
+                    button_text: 'Pay with USDT', // or customize for other coins
+                });
+            } else {
+                console.error('Error creating cryptocurrency order:', response.error);
+            }
+        });
+    </script>
+  <!-- <script>
+        // Move the PayPal rendering logic outside the button click event
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                const amount = document.getElementById('amount').value;
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: amount,
+                        },
+                    }],
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Transaction completed by ' + details.payer.name.given_name);
+                    fetch('/execute-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            paymentId: data.orderID,
+                            payerId: data.payerID,
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Payment success:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            },
+        }).render('#paypal-button-container');
+    </script> -->
+    <script>
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                const amount = document.getElementById('amount').value;
+                if (parseFloat(amount) < 9) {
+                    alert('Amount must be at least 9.00. Please enter a valid amount.');
+                    return false; // Prevent order creation for invalid amounts
+                }
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: amount,
+                        },
+                    }],
+                });
+            },
+            onApprove: function(data, actions) {
+                const amount = document.getElementById('amount').value;
+                if (parseFloat(amount) < 9) {
+                    alert('Amount must be at least 9.00. Please enter a valid amount.');
+                    return false; // Prevent further processing for invalid amounts
+                }
+                return actions.order.capture().then(function(details) {
+                    alert('Transaction completed by ' + details.payer.name.given_name);
+                    fetch('/execute-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            paymentId: data.orderID,
+                            payerId: data.payerID,
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Payment success:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            },
+        }).render('#paypal-button-container');
+    </script>
+    
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+    
+        // Function to update the price based on the selected plan
+        function updatePrice(plan) {
+            const amountInput = document.getElementById('amount');
+    
+            switch (plan) {
+                case '1_MONTH':
+                    amountInput.value = '9.99';
+                    break;
+                case '3_MONTHS':
+                    amountInput.value = '29.00';
+                    break;
+                case '6_MONTHS':
+                    amountInput.value = '39.00';
+                    break;
+                case '12_MONTHS':
+                    amountInput.value = '49.00';
+                    break;
+                default:
+                    amountInput.value = ''; // Handle other cases or provide a default value
+                    break;
+            }
+        }
+    
+        // Get the plan from the query parameter and update the price
+        const selectedPlan = getQueryParam('plan');
+        updatePrice(selectedPlan);
+    </script>
+    
+</body>
+</html>
