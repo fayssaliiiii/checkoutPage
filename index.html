@@ -315,6 +315,13 @@
             }
         }
     
+     // const selectedPlan = getQueryParam('plan');
+updatePrice(selectedPlan);
+
+// Set the value of the amount input field
+const amountInput = document.getElementById('amount');
+amountInput.value = getUpdatedAmountBasedOnPlan(selectedPlan);
+
         // Get the plan from the query parameter and update the price
         const selectedPlan = getQueryParam('plan');
         updatePrice(selectedPlan);
